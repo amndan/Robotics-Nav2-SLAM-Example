@@ -36,10 +36,16 @@ RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E
     apt-get update -q && \
     apt-get install -y --no-install-recommends \
       ros-${ROS_DISTRO}-ros-base \
+      ros-${ROS_DISTRO}-navigation2 \
+      ros-${ROS_DISTRO}-nav2-bringup \
+      ros-${ROS_DISTRO}-turtlebot3* \
       python3-rosdep \
       python3-colcon-common-extensions \
       python3-vcstool \
     && rm -rf /var/lib/apt/lists/* && rm /etc/apt/sources.list.d/ros2-latest.list
+
+# fix for rviz2 ogre lib
+echo "/opt/ros/galactic/opt/rviz_ogre_vendor/lib" > /etc/ld.so.conf.d/rviz2-ogre.conf
 
 RUN useradd --create-home --home-dir /home/${DEV_NAME} --shell /bin/bash --user-group --groups adm,sudo ${DEV_NAME} && \
     echo "$DEV_NAME:$DEV_NAME" | chpasswd && \
